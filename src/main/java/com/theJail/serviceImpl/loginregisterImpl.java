@@ -53,9 +53,18 @@ public class loginregisterImpl implements loginregister {
 		}
 	}
 	@Override
-	public void login() {
-		// TODO Auto-generated method stub
-		log.info("welcome to Login");		
+	public void login() throws GlobalException {
+		
+		log.info("Enter username");
+		String uname=bs.next();
+		log.info("Enter Password");
+		String upwd=bs.next();
+		//calling dao login method
+		user u1=dao.login(uname, upwd);
+		if(u1!=null) {
+			log.info("Hey "+u1.getUserName()+" login success");
+		}
+		
 	}
 
 }

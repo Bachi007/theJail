@@ -6,6 +6,6 @@ import com.theJail.model.user;
 public interface theJaildao {
 
 	public int registration(user u1)throws GlobalException;
-	public user login();
+	public user login(String username,String password)throws GlobalException;
 	
 }

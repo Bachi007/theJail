@@ -35,9 +35,31 @@ public class theJaildaoImpl implements theJaildao{
 	}
 
 	@Override
-	public user login() {
-		// TODO Auto-generated method stub
-		return null;
+	public user login(String username,String password)throws GlobalException
+	{
+		//auto closable session
+		try(Session ses=HibernateUtil.getSession()){
+			
+			ses.beginTransaction();
+			//retriving user details based on entered username
+		user u2=(user)ses.createQuery("from user where userName=:username").setParameter("username", username).uniqueResult();	
+			//if user is found
+		if(u2!=null) {
+			//lets check for the password
+			if(u2.getUserPassword().equals(password)) {
+				return u2;
+			}
+			else {
+				throw new GlobalException("wrong username or password");
+			}
+		}
+		else {
+			throw new GlobalException("user not found");
+		}
+			
+			
+		}
+		
 	}
 
 }

@@ -11,7 +11,9 @@ import com.theJail.dao.theJaildao;
 import com.theJail.daoImpl.theJaildaoImpl;
 import com.theJail.exception.GlobalException;
 import com.theJail.model.user;
+import com.theJail.service.admindashboard;
 import com.theJail.service.loginregister;
+import com.theJail.service.userdashboard;
 
 public class loginregisterImpl implements loginregister {
 	static Logger log=Logger.getLogger(App.class);
@@ -61,8 +63,20 @@ public class loginregisterImpl implements loginregister {
 		String upwd=bs.next();
 		//calling dao login method
 		user u1=dao.login(uname, upwd);
+		userdashboard udl=new userdashboardImpl();
+		admindashboard adl=new admindashboardimpl();
+		
 		if(u1!=null) {
 			log.info("Hey "+u1.getUserName()+" login success");
+			
+			if(u1.getUserRole().equals("student")) {
+				udl.dashboard();
+			}
+			else if (u1.getUserRole().equals("admin")) {
+				adl.dashboard();
+			}
+			
+			
 		}
 		
 	}

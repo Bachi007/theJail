@@ -1,7 +1,90 @@
 package com.theJail.daoImpl;
 
+import org.hibernate.Session;
+
+import com.theJail.config.HibernateUtil;
 import com.theJail.dao.userdao;
+import com.theJail.model.user;
 
 public class userdaoImpl implements userdao {
+
+	//getting profile using userId(PK)
+	@Override
+	public user viewProfile(int uId) {
+		
+		try(Session ses=HibernateUtil.getSession()){
+			
+			user u1=null;
+			u1=ses.get(user.class, uId);
+			return u1;
+			
+		}
+	}
+
+	//retriving due amount and typecasting result with int
+	@Override
+	public int viewDueAmount(int uId) {
+		try(Session ses=HibernateUtil.getSession()){
+	
+			
+			int userFee=(int)ses.createQuery("select userFee from user where userId=:uId").setParameter("uId", uId).uniqueResult();
+			return userFee;
+			
+		}
+	
+	}
+
+	//viewing room also needs user because roomId is PK in room and fk in user
+	@Override
+	public user viewRoom(int uId) {
+		try(Session ses=HibernateUtil.getSession()){
+			
+			user u1=null;
+			u1=ses.get(user.class, uId);
+			return u1;
+			
+		}
+	}
+
+	//updating phone number
+	@Override
+	public int updatePhone(int uId, String Phone) {
+		try(Session ses=HibernateUtil.getSession()){
+			
+			ses.beginTransaction();
+			
+			int st=ses.createQuery("update user set userPhone=:phone").setParameter("phone", Phone).executeUpdate();
+			
+			ses.getTransaction().commit();
+			return st;
+			
+		}
+	}
+
+	//changing password only if currnent password is correct
+	@Override
+	public int changePassword(int uId, String oldPwd, String newPwd) {
+	
+		try(Session ses=HibernateUtil.getSession()){
+			
+			ses.beginTransaction();
+			
+			String s1=(String)ses.createQuery("select userPassword from user where userId=:uid").setParameter("uid", uId).uniqueResult();
+			
+			if(s1.equals(oldPwd)) {
+				
+				int status=ses.createQuery("update user set userPassword=:newpwd").setParameter("newpwd", newPwd).executeUpdate();
+				
+				ses.getTransaction().commit();
+				return status;
+			}
+			else {
+				return -1;
+			}
+		}
+		
+		
+		
+	}
 
 }

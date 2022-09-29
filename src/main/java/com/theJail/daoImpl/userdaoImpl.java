@@ -53,7 +53,7 @@ public class userdaoImpl implements userdao {
 			
 			ses.beginTransaction();
 			
-			int st=ses.createQuery("update user set userPhone=:phone").setParameter("phone", Phone).executeUpdate();
+			int st=ses.createQuery("update user set userPhone=:phone where userId=:uId").setParameter("phone", Phone).setParameter("uId", uId).executeUpdate();
 			
 			ses.getTransaction().commit();
 			return st;
@@ -73,7 +73,7 @@ public class userdaoImpl implements userdao {
 			
 			if(s1.equals(oldPwd)) {
 				
-				int status=ses.createQuery("update user set userPassword=:newpwd").setParameter("newpwd", newPwd).executeUpdate();
+				int status=ses.createQuery("update user set userPassword=:newpwd where userId=:uid").setParameter("newpwd", newPwd).setParameter("uid", uId).executeUpdate();
 				
 				ses.getTransaction().commit();
 				return status;

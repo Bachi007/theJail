@@ -70,7 +70,7 @@ public class loginregisterImpl implements loginregister {
 			log.info("Hey "+u1.getUserName()+" login success");
 			
 			if(u1.getUserRole().equals("student")) {
-				udl.dashboard();
+				udl.dashboard(u1.getUserId());
 			}
 			else if (u1.getUserRole().equals("admin")) {
 				adl.dashboard();

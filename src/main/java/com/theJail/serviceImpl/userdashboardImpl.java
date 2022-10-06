@@ -70,7 +70,7 @@ public class userdashboardImpl implements userdashboard{
 	@Override
 	public void viewRoom() {
 		
-		user u1=dao.viewProfile(userId);
+		user u1=dao.viewRoom(userId);
 		room r1=u1.getUserRoom();
 		log.info("your room number is :"+r1.getRoomId()+" name is :"+r1.getRoomName()+" and it is"+r1.getRoomType()+" room");
 	}

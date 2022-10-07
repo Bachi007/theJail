@@ -2,7 +2,13 @@
 package com.theJail.serviceImpl;
 
 import java.util.Scanner;
+import java.util.Set;
 import java.util.regex.Pattern;
+
+import javax.validation.ConstraintViolation;
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
 
 import org.apache.log4j.Logger;
 
@@ -42,17 +48,22 @@ public class loginregisterImpl implements loginregister {
 		u1.setUserFee(0);
 		u1.setUserRoom(null);
 		//validating user data
-		if(Pattern.matches("[a-zA-Z]{4,}", name)&&Pattern.matches("[0-9]{10}", phone)&&Pattern.matches("[a-zA-Z0-9@#]{6,}", pwd))
-		{
 			//inserting user data
+	ValidatorFactory vf=Validation.buildDefaultValidatorFactory();
+		Validator valid=vf.getValidator();
+		
+	Set<ConstraintViolation<user>> violation=valid.validate(u1);
+	
+	if(violation.size()>0) {
+		for(ConstraintViolation<user> vio:violation)
+			log.info(vio.getMessage());
+	}	
+	else {
 		int status=dao.registration(u1);	
 		if(status==1) {
 			log.info("registration success");
 		}
 	}
-		else {
-			throw new GlobalException("Invalid  data");
-		}
 	}
 	@Override
 	public void login() throws GlobalException {
